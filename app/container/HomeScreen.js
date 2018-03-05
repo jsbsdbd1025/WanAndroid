@@ -4,7 +4,8 @@ import Swiper from 'react-native-swiper';
 import BaseScreen from "../base/BaseScreen";
 import Constant from "../base/Constant";
 import PageUtil from "../util/PageUtil";
-import ArticleItem from "../conponent/ArticleItem";
+import ArticleItem from "../component/ArticleItem";
+import DivideBlock from "../widget/DivideBlock";
 
 // 屏幕宽度
 var screenWidth = Dimensions.get('window').width;
@@ -105,6 +106,7 @@ export default class HomeScreen extends BaseScreen {
                 renderItem={({item}) => this._renderItem(item, navigate)}
                 onEndReachedThreshold={0.4}
                 onEndReached={() => this._loadMore()}
+                ItemSeparatorComponent={() => <DivideBlock/>}
             />
 
         )
@@ -153,6 +155,7 @@ export default class HomeScreen extends BaseScreen {
     //分页从0开始，做特殊处理
     _getArticle(pageNum) {
 
+        // http://www.wanandroid.com/article/list/1/json
         let url = Constant.domain + '/article/list/' + (pageNum - 1) + '/json';
         console.log(url)
 
@@ -169,7 +172,7 @@ export default class HomeScreen extends BaseScreen {
 
                         let pageList = responseJson.data;
 
-                        this.pageUtil.setPage(new PageUtil(pageList.curPage - 1, pageList.pageCount - 1));
+                        this.pageUtil.setPage(new PageUtil(pageList.curPage, pageList.pageCount - 1));
 
                         for (let i in pageList.datas) {
                             let item = pageList.datas[i];
